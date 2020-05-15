@@ -1,0 +1,21 @@
+{% extends 'learning/base.html' %}
+{% block content %}
+<br>
+<div class='row'>
+
+{% for course in courses %}
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 d-flex">
+    <div class="card text-white bg-success mb-5 fill-flex">
+        <img src="{{course.pic.url}}" class="card-img-top img-fluid">
+        <div class="card-body text-center">
+            <h5 class="card-title text-white">{{course.name}}</h5>
+            <p class="card-text">{{course.desc}}</p>
+            <a class="btn btn-warning" href="{% url 'enroll' course.id %}">Enroll</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+</div>
+
+{% endblock content %}

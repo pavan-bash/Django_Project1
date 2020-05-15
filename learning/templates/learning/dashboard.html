@@ -1,0 +1,55 @@
+{% extends 'learning/base.html' %}
+{% block content %}
+<br>
+<h1>My Courses</h1>
+<hr class="my-4">
+
+{% if enrolls %}
+    <div class='row'>
+        {% for enroll in enrolls %}
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 d-flex">
+                <div class="card text-white bg-success mb-5 fill-flex">
+                    <img src="{{enroll.coursename.pic.url}}" class="card-img-top img-fluid">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-white">{{enroll.coursename}}</h5>
+                        <h5 class="card-sub-title text-white">{{enroll.coursename.domain}}</h5>
+                        <p class="card-text">{{enroll.coursename.desc}}</p>
+                        <div class="mb-2"><a class="btn btn-warning" href="{% url 'content' enroll.coursename %}">Resume Course</a></div>
+                        <div><a class="btn btn-danger" href="{% url 'delete_course' enroll.coursename.id %}">Exit Course</a></div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a class="btn btn-outline-info btn-lg" href="{% url 'home' %}">Other Courses&nbsp;&nbsp;<i class="fas fa-plus"></i></a>
+{% else %}
+    <h5>Your dashboard is empty!</h5><br>
+    <a class="btn btn-outline-info btn-lg" href="{% url 'home' %}">Enroll Now&nbsp;&nbsp;<i class="fas fa-plus"></i></a>
+{% endif %}
+
+<hr class="my-4">
+
+<h1>My Blog Posts</h1>
+<hr class="my-4">
+
+{% if blogposts %}
+    {% for post in blogposts %}
+        <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <h6 class="mr-2">{{ post.author }}</h6>
+                    <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                </div>
+                <h2><a class="article-title" title="Tap to view more" href="{% url 'blog_detail' post.id %}">{{ post.title }}</a></h2>
+                <p class="article-content">{{ post.This_blog_is_about }}</p>
+            </div>
+        </article>
+    {% endfor %}
+    <a class="btn btn-outline-info btn-lg" href="{% url 'blog-create' %}">Write New&nbsp;&nbsp;<i class="fas fa-plus"></i></a>
+{% else %}
+    <h5>You haven't written a blog post yet!</h5><br>
+    <a class="btn btn-outline-info btn-lg" href="{% url 'blog-create' %}">Write One&nbsp;&nbsp;<i class="fas fa-plus"></i></a>
+{% endif %}
+
+{% endblock content %}

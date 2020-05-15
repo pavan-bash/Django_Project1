@@ -1,0 +1,51 @@
+{% extends 'learning/base.html' %}
+
+{% block home %}
+<div class="carousel slide" id="slides" data-ride="carousel">
+	<ul class="carousel-indicators">
+		<li data-target="#slides" data-slide-to="0" class="active"></li>
+	</ul>
+</div>
+<div class="carousel-inner">
+	<div class="carousel-item active">
+		<!--<img src="url('profile_pics/home5.jpg')">-->
+        <div class="carousel-caption">
+            <a class="btn btn-outline-primary" href="{% url 'about' %}">Know More</a>
+        </div>
+	</div>
+</div>
+
+<div class="container-fluid">
+    <div class="row jumbotron">
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+            <p class="lead">We provide you with courses on most of the famous technologies in the field of Computer Science. Enroll for the newset couses now !</p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
+            <a class="btn btn-outline-secondary btn-lg" href="{% url 'all_courses' %}">View Courses</a>
+        </div>
+    </div>
+</div>
+{% endblock home %}
+
+{% block content %}
+<br>
+<h1>Popular Domains</h1>
+<hr class="my-4">
+<div class='row'>
+
+{% for domain in domains %}
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 d-flex">
+    <div class="card text-white bg-success mb-5 fill-flex">
+        <img src="{{domain.pic.url}}" class="card-img-top img-fluid">
+        <div class="card-body text-center">
+            <h5 class="card-title text-white">{{domain.name}}</h5>
+            <p class="card-text">{{domain.desc}}</p>
+            <a href="{% url 'course' domain.id %}" class="btn btn-warning">Learn More</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+</div>
+
+{% endblock content %}

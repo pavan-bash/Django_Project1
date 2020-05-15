@@ -1,0 +1,55 @@
+{% extends 'learning/base.html' %}
+{% block content %}
+<br>
+<h1>ABOUT</h1>
+<hr class="my-4">
+<div class="container text-center">
+	<img src="/media/profile_pics/my_pic.jpg"><br><br>
+	<p>Hi. This is Pavan. Gald you are reading this. I am currently a student at SNIST, Hyd. Well, truely speaking i didn't plan for an educational site at all. My primary objective at the initial stages was blogging. Why blogging?. Blog Pages are farely easy to develop. So, I developed a blog site believing that could serve the purpose of worksample for grabbing an internship. At the later stages of development i felt that , something bigger than a blog site, would be great to make. So, that was the first time i thought about something to teach. What and How to teach was bigger questions then. Slowly i figured out a way to answer those questions in a best possible way i could and here comes this website into existance.</p>
+
+	<p>Well, regarding this website, it uses the most common web frameworks. Static web technologies include HTML, CSS, Bootstrap. Dynamic web technologies include JavaScript, JQuery. Django, A Python based web framework is used to integrate UI and database. SQLite3 is the backend database. This web application is hosted on Heroku web server and static files are stored using AWS S3 buckets.</p>
+
+	<p>Any further queries, bug fixes, suggestions, content updates, You got this comment section below.</p>
+</div>
+
+<hr class="my-4">
+<h3 style="text-align: center;">Comment Section&nbsp;<i class="fas fa-comments"></i></h3>
+<p style="text-align: center;">Total comments [{{ no_of_comments }}]<p>
+<hr class="my-4">
+
+<form method="POST">
+	{% csrf_token %}	
+	<div class="container">
+		{% if user.is_authenticated %}
+			<div class="textarea mb-2">{{ form.content }}</div>
+			<script>
+              var form_fields = document.getElementsByTagName('textarea')
+              form_fields[0].placeholder='Write your comment here!';
+            </script>
+			<button class="btn btn-outline-info mr-sm-2" type="submit">Comment&nbsp;<i class="fas fa-comment"></i></button>
+		{% else %}
+			<a href="{% url 'login_to_commentpublic' %}">Login to comment</a>
+		{% endif %}
+		<hr class="my-4">
+		{% if comments %}
+			{% for comment in comments %}
+				<article class="media content-section">
+					<!--<img class="rounded-circle article-img" src="{{ comment.username.profile.image.url }}">-->
+					<div class="media-body">
+						<div class="article-metadata">
+							<p class="mr-4">{{ comment.username }}
+							<small class="text-muted">
+								{{ comment.date_commented|date:"F d, Y" }}
+							</small></p>
+						</div>
+						<p class="article-content">{{ comment.content|linebreaks }}</p>
+					</div>
+				</article>
+			{% endfor %}
+		{% else %}
+			<h5>No comments yet!</h5><br>
+		{% endif %}
+	</div>
+</form>
+
+{% endblock content %}

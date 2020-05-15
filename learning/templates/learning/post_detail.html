@@ -1,0 +1,74 @@
+{% extends 'learning/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<br>
+<form method="POST">
+	{% csrf_token %}
+	<article class="media content-section md-5">
+		<img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+		<div class="media-body">
+			<div class="article-metadata">
+				<a class="mr-2" href="{% url 'user-post' post.author.username %}">{{ post.author }}</a>
+				<small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+				{% if post.author == user %}
+					<div>
+						<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'blog-update' post.id %}">Update</a>
+						<a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'blog-delete' post.id %}">Delete</a>
+					</div>
+				{% endif %}
+			</div>
+			<h2 class="article-title">{{ post.title }}</h2>
+			<p class="article-content">{{ post.content }}</p>
+
+			<button class="btn btn-outline-info btn-sm mr-sm-2" type="submit">Like&nbsp;<i class="fas fa-thumbs-up"></i></button><small class="mr-sm-4">{{ no_of_likes }} likes</small>
+			<br>
+
+			<div class="social_share">
+				<small style="font-size: 13px;">Share&nbsp;<i class="fas fa-share mr-sm-2"></i></small>
+				<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"><i class="fab fa-facebook-square"></i></a>
+				<a href="https://twitter.com/home?status={{ share_string }}%20{{ request.build_absolute_uri }}"><i class="fab fa-twitter-square"></i></a>
+				<a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title=share%20post&summary={{ share_string }}&source={{ build_absolute_uri }}"><i class="fab fa-linkedin"></i></a>
+			</div>
+
+		</div>
+	</article>
+</form>
+
+<h2>Comment Section&nbsp;<i class="fas fa-comments"></i></h2>
+<hr class="my-4">
+
+<form method="POST">
+	{% csrf_token %}	
+	<div class="container">
+		{% if user.is_authenticated %}
+			<div class="textarea mb-2">{{ form.content }}</div>
+			<script>
+              var form_fields = document.getElementsByTagName('textarea')
+              form_fields[0].placeholder='Write your comment here!';
+            </script>
+			<button class="btn btn-outline-info mr-sm-2" type="submit">Comment&nbsp;<i class="fas fa-comment"></i></button>
+		{% else %}
+			<a href="{% url 'login_to_comment' post.id %}">Login to comment</a>
+		{% endif %}
+		<hr class="my-4">
+		{% if comments %}
+			{% for comment in comments %}
+				<article class="media content-section">
+					<!--<img class="rounded-circle article-img" src="{{ comment.username.profile.image.url }}">-->
+					<div class="media-body">
+						<div class="article-metadata">
+							<p class="mr-4">{{ comment.username }}
+							<small class="text-muted">
+								{{ comment.date_commented|date:"F d, Y" }}
+							</small></p>
+						</div>
+						<p class="article-content">{{ comment.content|linebreaks }}</p>
+					</div>
+				</article>
+			{% endfor %}
+		{% else %}
+			<h5>No comments yet!</h5><br>
+		{% endif %}
+	</div>
+</form>
+{% endblock content %}
