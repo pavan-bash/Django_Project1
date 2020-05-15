@@ -57,7 +57,7 @@ class PublicComment(models.Model):
     date_commented = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.username.title
+        return self.username
 
 class Like(models.Model):
     username = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
