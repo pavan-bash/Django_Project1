@@ -15,6 +15,7 @@ from .filters import BlogFilter, CourseFilter
 from django.db.models import F
 import urllib.parse
 from .forms import CommentForm, PublicCommentForm
+import geoip2.database
 
 def ipview(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -22,7 +23,31 @@ def ipview(request):
 		ip = x_forwarded_for.split(',')[0]
 	else:
 		ip = request.META.get('REMOTE_ADDR')
-	context = {'title': 'IP', 'ip': ip}
+
+	reader = geoip2.database.Reader("./GeoLite2-City_20200602/GeoLite2-City.mmdb")
+	response = reader.city(ip)
+	city = response.city.name
+	lat = response.location.latitude
+	lon = response.location.longitude
+	country_iso = response.country.iso_code
+	country = response.country.name
+	state = response.subdivisions.most_specific.name
+	state_iso = response.subdivisions.most_specific.iso_code
+	postal_code = response.postal.code
+	reader.close()
+
+	context = {
+		'title': 'IP',
+		'ip': ip,
+		'city': city,
+		'lat': lat,
+		'lon': lon,
+		'country_iso': country_iso,
+		'country': country,
+		'state': state,
+		'state_iso': state_iso,
+		'postal_code': postal_code,
+	}
 	return render(request, 'learning/ip.html', context)
 
 def home(request):
